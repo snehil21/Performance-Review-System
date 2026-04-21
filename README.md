@@ -1,8 +1,13 @@
 # Performance Review System
 
-A fullstack performance review management system built with NestJS, React, and PostgreSQL. This application enables organizations to manage employee performance reviews with role-based access control and API documentation.
+A comprehensive fullstack application for managing employee performance reviews and feedback.
 
-## Tech Stack
+##  Live Demo
+
+- **Frontend**: https://performance-review-system.netlify.app/
+- **Backend API**: https://performance-review-system-production.up.railway.app
+
+##  Tech Stack
 
 **Backend:**
 - NestJS v9.4.3

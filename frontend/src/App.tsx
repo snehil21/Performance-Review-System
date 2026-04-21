@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
+import { SignUpPage } from './pages/SignUpPage';
 import { ChangePasswordPage } from './pages/ChangePasswordPage';
 import { AdminEmployeesPage } from './pages/AdminEmployeesPage';
 import { AdminReviewsPage } from './pages/AdminReviewsPage';
@@ -14,16 +15,30 @@ import {
   Button,
   Container,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const App: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
+    setLogoutConfirmOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setLogoutConfirmOpen(false);
     logout();
     navigate('/login');
+  };
+
+  const handleCancelLogout = () => {
+    setLogoutConfirmOpen(false);
   };
 
   const handleNavigate = (path: string) => {
@@ -57,15 +72,29 @@ const App: React.FC = () => {
             <Button color="inherit" onClick={() => handleNavigate('/change-password')}>
               Change Password
             </Button>
-            <Button color="inherit" onClick={handleLogout}>
+            <Button color="inherit" onClick={handleLogoutClick}>
               Logout
             </Button>
           </Toolbar>
         </AppBar>
       )}
 
+      <Dialog open={logoutConfirmOpen} onClose={handleCancelLogout}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to logout?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelLogout}>Cancel</Button>
+          <Button onClick={handleConfirmLogout} variant="contained" color="error">
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
 
         <Route
           path="/change-password"

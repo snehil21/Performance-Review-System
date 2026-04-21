@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Alert,
 } from '@mui/material';
 import { employeesService } from '../services';
 
@@ -32,6 +33,8 @@ export const AdminEmployeesPage: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', email: '', default_password: '' });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   useEffect(() => {
     fetchEmployees();
@@ -81,12 +84,18 @@ export const AdminEmployeesPage: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
         await employeesService.delete(id);
         fetchEmployees();
-      } catch (err) {
-        console.error('Failed to delete employee');
+      } catch (err: any) {
+        const errorMsg = err.response?.data?.message || err.message || 'Failed to delete employee';
+        if (errorMsg.includes('foreign key constraint')) {
+          setErrorMessage('Cannot delete this employee because they have reviews assigned to them. Please delete or reassign their reviews first.');
+        } else {
+          setErrorMessage(errorMsg);
+        }
+        setOpenErrorDialog(true);
       }
     }
   };
@@ -196,6 +205,20 @@ export const AdminEmployeesPage: React.FC = () => {
           <Button onClick={handleCloseDialog}>Cancel</Button>
           <Button onClick={handleSave} variant="contained">
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent sx={{ paddingTop: 2 }}>
+          <Alert severity="error" sx={{ marginBottom: 2 }}>
+            {errorMessage}
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenErrorDialog(false)} variant="contained">
+            OK
           </Button>
         </DialogActions>
       </Dialog>
