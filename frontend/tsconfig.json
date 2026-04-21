@@ -18,17 +18,12 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "allowJs": true,
-    "noFallthroughCasesInSwitch": true,
-    "declaration": false,
-    "sourceMap": true,
-    "noImplicitAny": false
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"
   ],
   "exclude": [
-    "node_modules",
-    "build",
-    "dist"
+    "node_modules"
   ]
 }

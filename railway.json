@@ -1,0 +1,46 @@
+{
+  "name": "Performance-Review-System",
+  "description": "Fullstack Performance Review System - NestJS + React + PostgreSQL",
+  "repo": "https://github.com/snehil21/Performance-Review-System",
+  "services": [
+    {
+      "id": "postgres",
+      "name": "PostgreSQL Database",
+      "type": "database",
+      "engine": "postgresql",
+      "variables": {
+        "POSTGRES_DB": "performance_review",
+        "POSTGRES_USER": "postgres"
+      }
+    },
+    {
+      "id": "backend",
+      "name": "NestJS Backend",
+      "type": "service",
+      "buildCommand": "cd backend && npm run build",
+      "startCommand": "cd backend && npm run start:prod",
+      "variables": {
+        "NODE_ENV": "production",
+        "PORT": "3001",
+        "JWT_SECRET": {"generate": true},
+        "JWT_EXPIRATION": "7d",
+        "CORS_ORIGIN": "${{ RAILWAY_PUBLIC_DOMAIN }}"
+      },
+      "depends_on": ["postgres"],
+      "root_directory": "backend"
+    },
+    {
+      "id": "frontend",
+      "name": "React Frontend",
+      "type": "service",
+      "buildCommand": "cd frontend && npm run build",
+      "startCommand": "cd frontend && npm start",
+      "variables": {
+        "REACT_APP_API_URL": "${{ backend.RAILWAY_PUBLIC_DOMAIN }}",
+        "NODE_ENV": "production"
+      },
+      "depends_on": ["backend"],
+      "root_directory": "frontend"
+    }
+  ]
+}
