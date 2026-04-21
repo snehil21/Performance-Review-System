@@ -1,7 +1,12 @@
 [build]
   base    = "frontend"
-  command = "npm ci && npm run build"
+  command = "npm ci && SKIP_PREFLIGHT_CHECK=true npm run build"
   publish = "build"
+
+[build.environment]
+  NODE_ENV = "production"
+  CI = "false"
+  SKIP_PREFLIGHT_CHECK = "true"
 
 [[redirects]]
   from   = "/*"
