@@ -21,7 +21,7 @@ export class TypeOrmConfigService {
         type: 'postgres',
         url: databaseUrl,
         entities: [User, Review],
-        synchronize: nodeEnv !== 'production',
+        synchronize: true, // Always sync schema to ensure tables exist
         logging: nodeEnv !== 'production',
         ssl: nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
       };
@@ -36,7 +36,7 @@ export class TypeOrmConfigService {
       password: this.configService.get('DB_PASSWORD', 'postgres'),
       database: this.configService.get('DB_NAME', 'performance_review'),
       entities: [User, Review],
-      synchronize: nodeEnv !== 'production',
+      synchronize: true, // Always sync schema to ensure tables exist
       logging: nodeEnv !== 'production',
     };
   }
