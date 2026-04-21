@@ -1,5 +1,4 @@
 [build]
-  base    = "frontend"
   command = "npm install && SKIP_PREFLIGHT_CHECK=true npm run build"
   publish = "build"
 
