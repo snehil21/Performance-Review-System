@@ -1,6 +1,6 @@
 [build]
   base    = "frontend"
-  command = "npm ci && SKIP_PREFLIGHT_CHECK=true npm run build"
+  command = "npm install && SKIP_PREFLIGHT_CHECK=true npm run build"
   publish = "build"
 
 [build.environment]
