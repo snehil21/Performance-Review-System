@@ -88,6 +88,19 @@ export const LoginPage: React.FC = () => {
             >
               {loading ? 'Logging in...' : 'Login'}
             </Button>
+
+            <Box sx={{ marginTop: 2, textAlign: 'center' }}>
+              <Typography variant="body2">
+                Don't have an account?{' '}
+                <Button
+                  color="primary"
+                  onClick={() => navigate('/signup')}
+                  sx={{ textTransform: 'none', padding: 0 }}
+                >
+                  Sign up here
+                </Button>
+              </Typography>
+            </Box>
           </form>
         </Paper>
       </Box>

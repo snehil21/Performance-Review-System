@@ -40,6 +40,8 @@ export const AdminReviewsPage: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openViewDialog, setOpenViewDialog] = useState(false);
+  const [viewingReview, setViewingReview] = useState<Review | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     assignee_id: '',
@@ -85,6 +87,16 @@ export const AdminReviewsPage: React.FC = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOpenViewDialog = (review: Review) => {
+    setViewingReview(review);
+    setOpenViewDialog(true);
+  };
+
+  const handleCloseViewDialog = () => {
+    setOpenViewDialog(false);
+    setViewingReview(null);
   };
 
   const handleSave = async () => {
@@ -142,6 +154,14 @@ export const AdminReviewsPage: React.FC = () => {
                 <TableCell>{review.status}</TableCell>
                 <TableCell>{review.due_date ? review.due_date.split('T')[0] : '-'}</TableCell>
                 <TableCell>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    sx={{ marginRight: 1 }}
+                    onClick={() => handleOpenViewDialog(review)}
+                  >
+                    View
+                  </Button>
                   <Button
                     size="small"
                     variant="outlined"
@@ -233,6 +253,53 @@ export const AdminReviewsPage: React.FC = () => {
           <Button onClick={handleSave} variant="contained">
             Save
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openViewDialog} onClose={handleCloseViewDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>Review Details</DialogTitle>
+        <DialogContent sx={{ paddingTop: 2 }}>
+          {viewingReview && (
+            <Box>
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                Employee (Assignee):
+              </Typography>
+              <Typography sx={{ marginBottom: 2 }}>
+                {viewingReview.assignee?.name} ({viewingReview.assignee?.email})
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                Reviewer:
+              </Typography>
+              <Typography sx={{ marginBottom: 2 }}>
+                {viewingReview.reviewer?.name} ({viewingReview.reviewer?.email})
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                Status:
+              </Typography>
+              <Typography sx={{ marginBottom: 2 }}>
+                {viewingReview.status}
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                Due Date:
+              </Typography>
+              <Typography sx={{ marginBottom: 2 }}>
+                {viewingReview.due_date ? viewingReview.due_date.split('T')[0] : '-'}
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                Description:
+              </Typography>
+              <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                {viewingReview.description || 'No description'}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseViewDialog}>Close</Button>
         </DialogActions>
       </Dialog>
     </Container>
