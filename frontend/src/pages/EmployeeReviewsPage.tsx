@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Paper,
@@ -8,14 +8,12 @@ import {
   TableHead,
   TableRow,
   Button,
-  Box,
   Typography,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
-  Select,
   MenuItem,
 } from '@mui/material';
 import { reviewsService } from '../services';
@@ -41,11 +39,7 @@ export const EmployeeReviewsPage: React.FC = () => {
   const [feedback, setFeedback] = useState('');
   const [newStatus, setNewStatus] = useState('todo');
 
-  useEffect(() => {
-    fetchReviews();
-  }, [user?.id]);
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       if (user?.id) {
         const response = await reviewsService.getAll({ reviewer_id: user.id });
@@ -56,7 +50,11 @@ export const EmployeeReviewsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
 
   const handleOpenDialog = (review: Review) => {
     setSelectedReview(review);

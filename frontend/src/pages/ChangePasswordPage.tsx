@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Paper, TextField, Button, Box, Typography, Alert } from '@mui/material';
 import { authService } from '../services';
-import { useAuth } from '../context/AuthContext';
 
 export const ChangePasswordPage: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');
@@ -10,7 +9,6 @@ export const ChangePasswordPage: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
